@@ -148,7 +148,7 @@ class slfv:
 def animate(i):
 	# Real time is:
 
-	ani_time = i*delta_t
+	ani_time = delta_t*(i+0.07*(i**2))
 
 	# Redefine the plot
 	my_lines.set_data(space_points, my_slfv.state)
