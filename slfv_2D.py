@@ -196,7 +196,7 @@ fig       = plt.figure()
 ax        = plt.axes(xlim=(0, space_horizon-5.5), ylim = (0, space_horizon-5.5))
 time_text = ax.text(0.05, 0.95,'',horizontalalignment='left',verticalalignment='top', transform=ax.transAxes)
 
-my_im     = ax.imshow(slfv_init, interpolation='none', vmin = 0, vmax = 1)
+my_im     = ax.imshow(slfv_init, interpolation='none', vmin = 0, vmax = 1, cmap ='bwr')
 # Change color map with cmap setting
 
 plt.title("The neutral SLFV process in two dimensions")
