@@ -54,7 +54,7 @@ class slfv:
 		# Other parameters (mainly for PPP)
 		self.space_horizon = space_horizon
 		self.time_horizon = 20.0
-		self.lam = 0.1
+		self.lam = 0.01
 
 		# Counters
 		self.count = 0
@@ -86,7 +86,7 @@ class slfv:
 
 		while self.next_jump[0] < self.next_time:
 			while (self.next_jump[0] < self.next_time and self.count<self.available_points-1):
-
+				
 				self.jump(self.next_jump[1], self.next_jump[2])
 
 				# We adjourn all variables
@@ -129,7 +129,7 @@ class slfv:
 					
 					self.dist = np.array([self.space_points[i]-loc_x, self.space_points[j]-loc_y])
 					if np.linalg.norm(self.dist) < self.radius:
-					
+
 						self.state[i,j] = self.state[i,j]*(1-self.impact)
 
 
@@ -180,8 +180,8 @@ def animate(i):
 # We define the parameters of the SLFV
 
 # Parameters of the domain
-space_horizon = 45.0
-dx = 0.5
+space_horizon = 80.0
+dx = 0.2
 space_points = np.arange(0,space_horizon,dx)
 space_len = len(space_points)
 
@@ -205,6 +205,8 @@ plt.title("The neutral SLFV process in two dimensions")
 # im1       = ax1.imshow(brwre_histo*(B_NUM_EXTRA/DIM_BOX)**2, interpolation='none', origin='low', vmin = 0, vmax = 0.034*intensity*B_NUM_EXTRA,  \
 # 	extent=[space_histo_x[0]/DIM_BOX, space_histo_x[-1]/DIM_BOX, space_histo_y[0]/DIM_BOX, space_histo_y[-1]/DIM_BOX], cmap = plt.get_cmap('jet'))
 
+embed()
+
 def init():
 
     my_im.set_data(my_slfv.state)
@@ -212,7 +214,7 @@ def init():
 
 # We let the animation go.
 delta_t=0.01
-ani = FuncAnimation(fig, animate, init_func=init, frames=200, interval=10, blit=True)
+ani = FuncAnimation(fig, animate, init_func=init, frames=50, interval=2, blit=True)
 ani.save('2D_slfv.gif', writer='imagemagick')
 # ani.save(filename = 'neutral_slfv.html')
 
