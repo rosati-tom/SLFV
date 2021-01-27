@@ -178,11 +178,11 @@ class slfv:
 def animate(i):
 	# Real time is:
 
-	ani_time = delta_t*(i+0.05i**2)
+	ani_time = delta_t*(i+0.05*(i**2))
 
-	my_slfv.radius =np.max(0.2, my_slfv.radius-0.01*i)
 
-	my_slfv.impact = np.max(0.05, my_slfv.impact-0.001*i)
+
+	my_slfv.radius =np.maximum(0.2, my_slfv.radius-0.01*ani_time)
 
 	# Redefine the plot
 	my_im.set_data(my_slfv.state)
