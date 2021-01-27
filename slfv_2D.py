@@ -54,7 +54,7 @@ class slfv:
 		# Other parameters (mainly for PPP)
 		self.space_horizon = space_horizon
 		self.time_horizon = 20.0
-		self.lam = 0.01
+		self.lam = 0.1
 
 		# Counters
 		self.count = 0
@@ -62,7 +62,7 @@ class slfv:
 
 		# Parameters of the SLFV
 		self.impact = 0.2
-		self.radius = 2.0
+		self.radius = 3.0
 
 		if self.radius < self.dx:
 			print( "\n\n ERROR: The radius of the impact zones is smaller than the spatial scale \n\n")
@@ -80,6 +80,9 @@ class slfv:
 		self.local_average_count =0
 		self.choice =0
 
+		# This gives the maximum  distance the index has to run through:
+		self.int_limit = int(self.radius/dx)+10
+
 	def go_to_time(self, next_time):
 
 		self.next_time = next_time
@@ -87,7 +90,8 @@ class slfv:
 		while self.next_jump[0] < self.next_time:
 			while (self.next_jump[0] < self.next_time and self.count<self.available_points-1):
 				
-				self.jump(self.next_jump[1], self.next_jump[2])
+				self.next_jump_loc = self.next_jump[1:3]
+				self.jump()
 
 				# We adjourn all variables
 				self.count += 1
@@ -104,56 +108,69 @@ class slfv:
 					
 
 
-	def jump(self, loc_x, loc_y):
+	def jump(self):
+
+		# We associate two indices to the locations:
+		self.int_loc = self.next_jump_loc/dx
+
+		self.int_loc_bot = np.where(self.int_loc - self.int_limit>0, self.int_loc - self.int_limit, 0)
+		self.int_loc_bot = [int(self.int_loc_bot[0]), int(self.int_loc_bot[1])] 
+
+		self.int_loc_top = np.where(self.int_loc + self.int_limit < self.space_points_len, self.int_loc + self.int_limit, self.space_points_len)
+		self.int_loc_top = [int(self.int_loc_top[0]), int(self.int_loc_top[1])] 
+
+		# print( self.int_limit, self.int_loc, self.next_jump_loc, self.int_loc_top, self.int_loc_bot)
+
 		
 		# First we choose the direction of the reproduction event
-		self.average(loc_x, loc_y)
+		self.average()
 		self.choice = np.random.binomial(1,self.local_average)
 
 		# Growth
 		if self.choice == 1:
 		
-			for i in range(self.space_points_len):
-				for j in range(self.space_points_len):
+			for i in range(self.int_loc_bot[0], self.int_loc_top[0]):
+				for j in range(self.int_loc_bot[1], self.int_loc_top[1]):
+						
+					self.dist = np.linalg.norm(self.space_points[[i,j]] - self.next_jump_loc)
 					
-					self.dist = np.array([self.space_points[i]-loc_x, self.space_points[j]-loc_y])
-					if np.linalg.norm(self.dist) < self.radius:
+					if self.dist < self.radius:
 
 						self.state[i,j] = self.state[i,j]+self.impact*(1-self.state[i,j])
 
 		# Decrease
 		if self.choice ==0:
-
-			for i in range(self.space_points_len):
-				for j in range(self.space_points_len):
+			
+			for i in range(self.int_loc_bot[0], self.int_loc_top[0]):
+				for j in range(self.int_loc_bot[1], self.int_loc_top[1]):
+						
+					self.dist = np.linalg.norm(self.space_points[[i,j]] - self.next_jump_loc)
 					
-					self.dist = np.array([self.space_points[i]-loc_x, self.space_points[j]-loc_y])
-					if np.linalg.norm(self.dist) < self.radius:
+					if self.dist < self.radius:
 
 						self.state[i,j] = self.state[i,j]*(1-self.impact)
 
 
 
 
-	def average(self, loc_x, loc_y):
+	def average(self):
 
 		# This function builds the local average of the process around "loc"
 		self.local_average=0
 		self.local_average_count=0.0
 
-		for i in range(self.space_points_len):
-			for j in range(self.space_points_len):
+		for i in range(self.int_loc_bot[0], self.int_loc_top[0]):
+			for j in range(self.int_loc_bot[1], self.int_loc_top[1]):
 					
-				self.dist = np.array([self.space_points[i]-loc_x, self.space_points[j]-loc_y])
-				if np.linalg.norm(self.dist) < self.radius:
+				self.dist = np.linalg.norm(self.space_points[[i,j]] - self.next_jump_loc)
+				
+				if self.dist < self.radius:
 
 					self.local_average += self.state[i,j]
 					self.local_average_count+=1.0
-		
-		# We normalize the result
-		if self.local_average_count==0:
-			self.local_average_count=1
 
+
+		# We normalize the average
 		self.local_average = self.local_average/self.local_average_count
 
 
@@ -180,8 +197,8 @@ def animate(i):
 # We define the parameters of the SLFV
 
 # Parameters of the domain
-space_horizon = 80.0
-dx = 0.2
+space_horizon = 60.0
+dx = 0.05
 space_points = np.arange(0,space_horizon,dx)
 space_len = len(space_points)
 
@@ -193,7 +210,9 @@ my_slfv = slfv(slfv_init, space_points, dx, space_horizon)
 
 #We set up the picture
 fig       = plt.figure()
-ax        = plt.axes(xlim=(0, space_horizon-5.5), ylim = (0, space_horizon-5.5))
+ax        = plt.axes()
+plt.axis('off')
+# ax        = plt.axes(xlim=(0, space_horizon-5.5), ylim = (0, space_horizon-5.5))
 time_text = ax.text(0.05, 0.95,'',horizontalalignment='left',verticalalignment='top', transform=ax.transAxes)
 
 my_im     = ax.imshow(slfv_init, interpolation='none', vmin = 0, vmax = 1, cmap ='bwr')
@@ -213,8 +232,8 @@ def init():
     return my_im,
 
 # We let the animation go.
-delta_t=0.01
-ani = FuncAnimation(fig, animate, init_func=init, frames=50, interval=2, blit=True)
+delta_t=0.005
+ani = FuncAnimation(fig, animate, init_func=init, frames=500, interval=2, blit=True)
 ani.save('2D_slfv.gif', writer='imagemagick')
 # ani.save(filename = 'neutral_slfv.html')
 
