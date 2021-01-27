@@ -178,7 +178,11 @@ class slfv:
 def animate(i):
 	# Real time is:
 
-	ani_time = delta_t*i
+	ani_time = delta_t*(i+0.05i**2)
+
+	my_slfv.radius =np.max(0.2, my_slfv.radius-0.01*i)
+
+	my_slfv.impact = np.max(0.05, my_slfv.impact-0.001*i)
 
 	# Redefine the plot
 	my_im.set_data(my_slfv.state)
@@ -198,7 +202,7 @@ def animate(i):
 
 # Parameters of the domain
 space_horizon = 60.0
-dx = 0.05
+dx = 0.04
 space_points = np.arange(0,space_horizon,dx)
 space_len = len(space_points)
 
