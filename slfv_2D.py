@@ -179,9 +179,6 @@ def animate(i):
 	# Real time is:
 
 	ani_time = delta_t*(i+0.05*(i**2))
-
-
-
 	my_slfv.radius =np.maximum(0.2, my_slfv.radius-0.01*ani_time)
 
 	# Redefine the plot
