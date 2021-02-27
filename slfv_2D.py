@@ -54,7 +54,7 @@ class slfv:
 		# Other parameters (mainly for PPP)
 		self.space_horizon = space_horizon
 		self.time_horizon = 20.0
-		self.lam = 0.1
+		self.lam = 0.5
 
 		# Counters
 		self.count = 0
@@ -62,7 +62,7 @@ class slfv:
 
 		# Parameters of the SLFV
 		self.impact = 0.2
-		self.radius = 3.0
+		self.radius = 1.6
 
 		if self.radius < self.dx:
 			print( "\n\n ERROR: The radius of the impact zones is smaller than the spatial scale \n\n")
@@ -178,9 +178,7 @@ class slfv:
 def animate(i):
 	# Real time is:
 
-	ani_time = delta_t*(i+0.05*(i**2))
-	my_slfv.radius =np.maximum(0.2, my_slfv.radius-0.01*ani_time)
-
+	ani_time = delta_t*i
 	# Redefine the plot
 	my_im.set_data(my_slfv.state)
 
@@ -233,8 +231,8 @@ def init():
     return my_im,
 
 # We let the animation go.
-delta_t=0.005
-ani = FuncAnimation(fig, animate, init_func=init, frames=500, interval=2, blit=True)
+delta_t=0.007
+ani = FuncAnimation(fig, animate, init_func=init, frames=900, interval=2, blit=True)
 ani.save('2D_slfv.gif', writer='imagemagick')
 # ani.save(filename = 'neutral_slfv.html')
 

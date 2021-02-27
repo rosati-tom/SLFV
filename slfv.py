@@ -54,7 +54,7 @@ class slfv:
 		# Other parameters (mainly for PPP)
 		self.space_horizon = space_horizon
 		self.time_horizon = 10.0
-		self.lam = 0.08
+		self.lam = 0.07
 
 		# Counters
 		self.count = 0
@@ -166,7 +166,7 @@ def animate(i):
 # We define the parameters of the SLFV
 
 # Parameters of the domain
-space_horizon = 80.0
+space_horizon = 90.0
 dx = 0.05
 space_points = np.arange(0,space_horizon,dx)
 space_len = len(space_points)
@@ -189,7 +189,7 @@ def init():
     return my_lines,
 
 # We let the animation go.
-delta_t=0.01
+delta_t=0.005
 ani = FuncAnimation(fig, animate, init_func=init, frames=2000, interval=10, blit=True)
 ani.save('slfv.gif', writer='imagemagick')
 # ani.save(filename = 'neutral_slfv.html')
