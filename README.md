@@ -14,3 +14,7 @@ In the pictures white equal distribution of the two populations. Red a higher pr
 ![alt text](slfv_1.gif)
 
 ![alt text](slfv_2.gif)
+
+And in one dimensions:
+
+![alt text](slfv.gif)
