@@ -15,6 +15,6 @@ In the pictures white represents an equal distribution of the two populations. R
 
 ![alt text](slfv_2.gif)
 
-And in one dimensions:
+And in one dimension:
 
 ![alt text](slfv.gif)
