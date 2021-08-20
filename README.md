@@ -1,6 +1,6 @@
 # SLFV
 
-We silmulate the spatial Lambda-Fleming-Viot-Model. 
+We silmulate the spatial Lambda-Fleming-Viot model. 
 
 This is a half discrete and half continuous model which describes two competing species distributed in the 2D plane (or any other dimensions). Then reproduction events take place according to a Poisson point process and involve balls of fixed radius.
 
@@ -9,7 +9,7 @@ particle system:
 
 - https://arxiv.org/abs/2004.05931
 
-In the pictures white equal distribution of the two populations. Red a higher presence of one, blue of the other population.
+In the pictures white represents an equal distribution of the two populations. Red a higher presence of one, blue of the other population.
 
 ![alt text](slfv_1.gif)
 
