@@ -1,5 +1,7 @@
 # We simulate the spatial Lambda-Fleming-Viot model
 
+# This line is useless.
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
